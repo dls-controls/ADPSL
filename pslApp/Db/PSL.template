@@ -1,6 +1,11 @@
 # Database for the records specific to the PSL driver
 # Mark Rivers
 # May 9, 2012
+# % macro, P, Device Prefix
+# % macro, R, Device Suffix
+# % macro, PORT, Asyn Port name
+# % macro, ADDR, Asyn Port Address
+# % macro, TIMEOUT, Asyn Port Timeout
 
 include "ADBase.template"
 include "NDFile.template"
