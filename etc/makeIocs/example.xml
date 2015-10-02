@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<components arch="linux-x86_64">
+	<ADPSL.PSL ADDR="0" IP_PORT="192.168.1.10" P="PSL" PORT="psl" R=":PSL:" TIMEOUT="1"/>
+	<ADCore.NDFileHDF5 ADDR="0" NDARRAY_PORT="psl" P="PSL" PORT="hdf5" QUEUE="10" R=":HDF5:" TIMEOUT="1"/>
+</components>
