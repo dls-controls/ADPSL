@@ -1,24 +1,28 @@
 from iocbuilder import Substitution, AutoSubstitution
+from iocbuilder.modules.ADCore import ADCore, ADBaseTemplate, makeTemplateInstance, includesTemplates
 from iocbuilder.arginfo import *
-from iocbuilder.modules.asyn import AsynIP
-from iocbuilder.modules.ADCore import _ADBase
+from iocbuilder.modules.asyn import AsynIP, AsynPort
 import iocbuilder.modules
 
-
+@includesTemplates(ADBaseTemplate)
 class _PSL(AutoSubstitution):
     TemplateFile = "PSL.template"
 
 
-class PSL(_ADBase):
+class PSL(AsynPort):
+    Dependencies = (ADCore,)
     _SpecificTemplate = _PSL
+    UniqueName = "PORT"
 
-    def __init__(self, IP_PORT, BUFFERS=50, MEMORY=0, **args):
-        self.ip_port = AsynIP(IP_PORT, name=args["PORT"] + ".ip")
-        self.__super.__init__(**args)
+    def __init__(self, PORT, IP_PORT, BUFFERS=50, MEMORY=0, **args):
+        self.ip_port = AsynIP(IP_PORT, name=PORT + ".ip")
+        self.__super.__init__(PORT)
         self.__dict__.update(locals())
+        makeTemplateInstance(self._SpecificTemplate, locals(), args)
 
-    ArgInfo = _ADBase.ArgInfo + _SpecificTemplate.ArgInfo + makeArgInfo(
+    ArgInfo = ADBaseTemplate.ArgInfo + _SpecificTemplate.ArgInfo + makeArgInfo(
         __init__,
+        PORT = Simple('Port name for the detector', str),
         IP_PORT=Simple('Address and port of the PSL box', str),
         BUFFERS=Simple('Maximum number of NDArray buffers to be created for '
                        'plugin callbacks', int),
@@ -29,5 +33,5 @@ class PSL(_ADBase):
 
     def Initialise(self):
         print('# PSLConfig(portName, serverPort, maxBuffers, maxMemory)\n'
-              'PSLConfig("{PORT}", "{PORT}.ip", {BUFFERS}, {MEMORY})'.format(
+              'PSLConfig("{PORT}", "{ip_port}", {BUFFERS}, {MEMORY})'.format(
                   **self.__dict__))
