@@ -6,6 +6,7 @@
 # % macro, PORT, Asyn Port name
 # % macro, ADDR, Asyn Port Address
 # % macro, TIMEOUT, Asyn Port Timeout
+# % gui, $(PORT), edmtab, PSL.edl, P=$(P),R=$(R)
 
 include "ADBase.template"
 include "NDFile.template"
